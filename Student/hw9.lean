@@ -173,7 +173,7 @@ no matter what proposition X represents. The validity of
 -/
 
 
-def P : Prop := _
+def P : Prop := no_value
 #check em P
 
 /-!
@@ -199,16 +199,54 @@ of the four resulting cases.
 
 HOMEWORK: Complete this proof.
 -/
-
+/-!
 example (A B : Prop) : ¬(A ∧ B) -> ¬A ∨ ¬B :=
 λ nab =>
 let proof_of_aornota := em A
 let proof_of_bornotb := em B
-_
+match proof_of_aornota with
+  | Or.inl a => match proof_of_bornotb with
+    | Or.inl b => False.elim(nab⟨a,b⟩)
+    | Or.inr notb => Or.inr notb
+    | Or.inr nota => Or.inl nota
 
 
-
-example (A B : Prop) : ¬(A ∧ B) -> ¬A ∨ ¬B :=
+example (A B : Prop) : ¬(A ∧ B) → ¬A ∨ ¬B :=
 λ nab =>
 let proof_of_aornota := em A
 let proof_of_bornotb := em B
+match proof_of_aornota with
+    | Or.inl a =>
+      match proof_of_bornotb with
+      | Or.inl b => False.elim (n (and.intro a b))
+      | Or.inr notb => Or.inr notb
+    | Or.inr nota => Or.inl nota
+
+-/
+
+-- FINAL
+
+
+example (A B : Prop) : ¬(A ∧ B) → ¬A ∨ ¬B :=
+λ nab =>
+-- proof that p and not p is false for a
+let proof_of_aornota := em A
+-- proof that p and not p is false for b
+let proof_of_bornotb := em B
+--^ proof of excluded middle ( i think)
+-- case analysis on both proof_of_aornota and proof_of_bornotb
+--starting with proof_of_aornota first case left injection of a
+match proof_of_aornota with
+  | Or.inl a =>
+  -- nested inside is the case analysis for proof_of_bornotb where we test
+  -- both the left injection of b and the right injection of not b
+    match proof_of_bornotb with
+    -- false elimination is used here to try and prove contradiction
+    | Or.inl b => False.elim (nab ⟨a, b⟩)
+    --If the value of b is false it returns Or.inr n_b
+    --this means not b is true
+    | Or.inr n_b => Or.inr n_b
+     --If the value of a is false it returns Or.inr n_a
+    --this means not a is true
+  | Or.inr n_a => Or.inl n_a
+  -- ^ above is the second caswe for the match proof proof_of_aornota and shows when not a is true
