@@ -174,16 +174,24 @@ of a string of being of an even-length.
 
 -- Here
 
+<<<<<<< HEAD
 def ev_len_str : String  → Prop
 | s => s.length % 2 = 0
 
 
+=======
+def ev_len_str : String → Prop
+| s => s.length % 2 = 0
+
+>>>>>>> d0260dd504987affbc8daa512f075874f0ddda23
 
 
 /-
 (2) Use #check to typecheck an expression for the set of all
 even length strings.
 -/
+
+#check { s : String | ev_len_str s }
 
 -- Here
 
@@ -197,6 +205,9 @@ String value, s, and to any Nat value, n, that is satisfied
 just in those cases where s.length equals n.
 -/
 
+def str_eq_len : String → Nat → Prop
+| s, n => s.length = n
+
 -- Here
 
 
@@ -208,6 +219,8 @@ of all ordered pairs, p = ⟨ s, n ⟩, such that n = s.length.
 
 -- Here
 
+def str_eq_lens : Set (String × Nat) := { p | str_eq_len p.1 p.2}
+
 
 
 /-
@@ -217,6 +230,7 @@ that ⟨ "I love Logic!", 13 ⟩ ∈ str_eq_lens.
 
 -- Here
 
+example : ⟨ "I love Logic!", 13 ⟩ ∈ str_eq_lens := rfl
 
 
 
@@ -225,6 +239,28 @@ that ⟨ "I love Logic!", 13 ⟩ ∈ str_eq_lens.
 ⟨ "I love Logic!", 1 ⟩ ∉ str_eq_lens. That's shorthand
 notation for ¬("I love Logic!", 1⟩ ∈ str_eq_lens. And you
 know what that means.
+-/
+
+-- Here
+
+example : ⟨ "I love Logic!", 1 ⟩ ∉ str_eq_lens :=
+λ (t : ⟨ "I love Logic!", 1 ⟩ ∈ str_eq_lens) => nomatch t
+
+
+
+
+/-!
+(7) Write a formal definition, in Lean, of *party*, as
+a *set* of objects of type *Person*. Make the Person type
+inhabited by giving it the single constructor, Person.jim.
+Hi, jim. Optionally use "structure" for this type, even if
+you don't know how to change the default constructor name,
+*mk*, to *jim*.
+-/
+
+
+
+/-!
 -/
 
 -- Here
